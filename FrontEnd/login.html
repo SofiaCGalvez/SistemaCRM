@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dist/output.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- Logo de la pestaña -->
+    <link rel="icon" type="image/png" href="images/logo1.png">
+    <title>CRM</title>
+</head>
+<body>
+    <div id="root">
+        <div class="min-h-screen bg-surface flex items-center justify-center px-4 ">
+            <div class="w-full max-w-md">
+                <div class="bg-white rounded-2xl p-8 border border-brand-100">
+                    <div class="flex flex-col items-center mb-8">
+                        <img alt="logo" class="w-42 h-22 object-contain mb-4" src="images/logo.png">
+                        <p class="text-sm text-gray-500 mt-1">Sign in to your account</p>
+                    </div>
+                    <form class="space-y-5">
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+                                    <i class="ri-mail-line"></i>
+                                </span>
+                                <input required class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 placeholder="you@company.com" type="email" value="admin@demo.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+                                    <i class="ri-lock-line"></i>
+                                </span>
+                                <input required class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400" placeholder="Enter your password" type="password" value="12345">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                            <div class="flex gap-3">
+                                <button type="button" data-role="admin" class="role-button flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors bg-brand-50 border-brand-300 text-brand-700">
+                                    <span class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-shield-user-line"></i>
+                                    </span>
+                                    Admin
+                                </button>
+                                <button type="button" data-role="staff" class="role-button flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors border-gray-200 text-gray-600 hover:bg-gray-50">
+                                    <span class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-user-line"></i>
+                                    </span>
+                                    Staff
+                                </button>
+                            </div>
+                            <input type="hidden" name="role" id="selectedRole" value="admin">
+                        </div>
+                        <button type="submit" class="w-full flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-lg transition-colors disabled:opacity-60">
+                            <span class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-login-box-line"></i>
+                            </span>
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const roleButtons = document.querySelectorAll('.role-button');
+        const selectedRoleInput = document.getElementById('selectedRole');
+
+        const activeClasses = ['bg-brand-50', 'border-brand-300', 'text-brand-700'];
+        const inactiveClasses = ['border-gray-200', 'text-gray-600', 'hover:bg-gray-50'];
+
+        roleButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                roleButtons.forEach((currentButton) => {
+                    currentButton.classList.remove(...activeClasses, ...inactiveClasses);
+
+                    if (currentButton === button) {
+                        currentButton.classList.add(...activeClasses);
+                        selectedRoleInput.value = currentButton.dataset.role;
+                    } else {
+                        currentButton.classList.add(...inactiveClasses);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
