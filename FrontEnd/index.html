@@ -11,6 +11,23 @@
     <!-- Logo de la pestaña -->
     <link rel="icon" type="image/png" href="images/logo1.png">
     <title>CRM</title>
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
+
+        .mobile-menu {
+            max-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu a,
+        .mobile-menu button {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <div id="root">
@@ -23,13 +40,13 @@
                     </a>
                     <div class="flex items-center gap-3">
                         <div class="w-7 h-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-semibold text-xs">A</div>
-                        <button class="w-8 h-8 flex items-center justify-center text-gray-600">
-                            <i class="ri-menu-line text-lg"></i>
+                        <button id="mobileMenuButton" type="button" class="w-8 h-8 flex items-center justify-center text-gray-600" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                            <i id="mobileMenuIcon" class="ri-menu-line text-lg"></i>
                         </button>
                     </div>
                 </div>
 
-                <nav class="px-4 pb-4 space-y-1 border-t border-brand-100 bg-white">
+                <nav id="mobileMenu" class="mobile-menu hidden px-4 pb-4 space-y-1 border-t border-brand-100 bg-white">
                     <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-brand-50 text-brand-700" href="index.html" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-home-4-line"></i>
@@ -93,37 +110,37 @@
                         </span>
                         Home
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="dashboard.html" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-layout-grid-line"></i>
                         </span>
                         Dashboard
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="directorio.html" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-building-line"></i>
                         </span>
                         Companies
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="memberships.html" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-vip-crown-line"></i>
                         </span>
                         Memberships
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="#" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-calendar-line"></i>
                         </span>
                         Events
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="#" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-team-line"></i>
                         </span>
                         Attendees
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="#" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-file-list-3-line"></i>
                         </span>
@@ -131,13 +148,13 @@
                     </a>
                     <div class="my-3 border-t border-brand-100/60"></div>
                     <p class="px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Actions</p>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="renewals.html" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-alarm-warning-line"></i>
                         </span>
                         Pending Renewals
                     </a>
-                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="index.html" data-discover="true">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="#" data-discover="true">
                         <span class="w-5 h-5 flex items-center justify-center">
                             <i class="ri-user-add-line"></i>
                         </span>
@@ -161,18 +178,166 @@
                 </div>
             </aside>
              <main class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
-                <div class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
                     <div class="p-6 md:p-8 max-w-7xl mx-auto">
                         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
                             <div>
                                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Welcome back</h1>
                                 <p class="text-gray-500 mt-1">Choose a module to get started</p>
                             </div>
+                            <button class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors shadow-sm whitespace-nowrap">
+                                <span class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-mail-send-line"></i>
+                                </span>
+                                Request a Quote
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-brand-600 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-dashboard-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Dashboard</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Analytics & overview</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-sky-600 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-building-4-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Companies</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Manage companies</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-vip-crown-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Memberships</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Payments & renewals</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-calendar-event-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Events</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Plan & track events</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-indigo-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-team-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Attendees</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Event registrations</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-rose-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-task-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Tasks</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Follow-ups & to-dos</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="mb-2">
+                            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Quick Actions</h2>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-alarm-warning-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Pending Renewals</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Payments & renewals due</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a class="group bg-white rounded-xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all duration-200" href="#" data-discover="true">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white flex-shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="w-6 h-6 flex items-center justify-center text-xl">
+                                            <i class="ri-user-add-line"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-base font-semibold text-gray-900 group-hover:text-brand-700 transition-colors">Potential Members</h3>
+                                        <p class="text-sm text-gray-500 mt-0.5">Leads & prospects</p>
+                                    </div>
+                                    <span class="w-5 h-5 flex items-center justify-center text-gray-300 group-hover:text-brand-400 transition-colors flex-shrink-0 mt-1">
+                                        <i class="ri-arrow-right-s-line text-lg"></i>
+                                    </span>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                </div>
             </main>
         </div>
     </div>
+    <script src="./authGuard.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>
