@@ -3,6 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
+const directoryRoutes = require("./routes/directoryRoutes");
+const membershipRoutes = require("./routes/membershipRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
 const sequelize = require("./config/database");
 
@@ -13,11 +15,17 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/directory", directoryRoutes);
+app.use("/api/memberships", membershipRoutes);
 app.use("/api/protected", protectedRoutes);
 
 sequelize.authenticate()
   .then(() => {
     console.log("MySQL conectado");
+    return sequelize.sync();
+  })
+  .then(() => {
+    console.log("Tablas sincronizadas");
   })
   .catch((error) => {
     console.log("Error de conexion:");

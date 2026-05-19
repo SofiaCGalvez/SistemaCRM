@@ -1,5 +1,5 @@
 const AUTH_PAGES_BY_ROLE = {
-  admin: ["index.html", "dashboard.html", "directorio.html", "memberships.html"],
+  admin: ["index.html", "dashboard.html", "directorio.html", "memberships.html", "renewals.html"],
   staff: ["dashboard.html", "directorio.html"]
 };
 
@@ -17,7 +17,8 @@ const PAGE_BY_LABEL = {
   Home: "index.html",
   Dashboard: "dashboard.html",
   Companies: "directorio.html",
-  Memberships: "memberships.html"
+  Memberships: "memberships.html",
+  "Pending Renewals": "renewals.html"
 };
 
 const getCurrentPage = () => {

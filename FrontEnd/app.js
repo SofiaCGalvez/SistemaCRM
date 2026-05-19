@@ -1,317 +1,350 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileMenuButton = document.getElementById('mobileMenuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+document.addEventListener("DOMContentLoaded", () => {
+  const mobileMenuButton = document.getElementById("mobileMenuButton");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const mobileMenuIcon = document.getElementById("mobileMenuIcon");
 
-    if (mobileMenuButton && mobileMenu && mobileMenuIcon) {
-        mobileMenuButton.addEventListener('click', () => {
-            const isOpen = !mobileMenu.classList.contains('hidden');
+  if (mobileMenuButton && mobileMenu && mobileMenuIcon) {
+    mobileMenuButton.addEventListener("click", () => {
+      const isOpen = !mobileMenu.classList.contains("hidden");
 
-            mobileMenu.classList.toggle('hidden');
-            mobileMenuButton.setAttribute('aria-expanded', String(!isOpen));
-            mobileMenuButton.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
-            mobileMenuIcon.classList.toggle('ri-menu-line', isOpen);
-            mobileMenuIcon.classList.toggle('ri-close-line', !isOpen);
-        });
+      mobileMenu.classList.toggle("hidden");
+      mobileMenuButton.setAttribute("aria-expanded", String(!isOpen));
+      mobileMenuButton.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
+      mobileMenuIcon.classList.toggle("ri-menu-line", isOpen);
+      mobileMenuIcon.classList.toggle("ri-close-line", !isOpen);
+    });
+  }
+
+  const openCompanyModalButton = document.getElementById("openCompanyModal");
+  const companyModal = document.getElementById("companyModal");
+  const closeCompanyModalButton = document.getElementById("closeCompanyModal");
+  const cancelCompanyModalButton = document.getElementById("cancelCompanyModal");
+  const companyForm = document.getElementById("companyForm");
+  const companiesTableBody = document.getElementById("companiesTableBody");
+  const companiesCount = document.getElementById("companiesCount");
+  const exportCompaniesButton = document.getElementById("exportCompaniesButton");
+  const companyModalTitle = document.getElementById("companyModalTitle");
+  const companyModalDescription = document.getElementById("companyModalDescription");
+  const saveCompanyButton = document.getElementById("saveCompanyButton");
+  const searchInput = document.getElementById("companySearch");
+  const industryFilter = document.getElementById("industryFilter");
+
+  if (!openCompanyModalButton || !companyModal || !companyForm || !companiesTableBody) {
+    return;
+  }
+
+  const API_URL = "http://127.0.0.1:3000/api/directory";
+  let directoryEntries = [];
+  let editingCompanyId = null;
+
+  const getAuthHeaders = () => ({
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`
+  });
+
+  const normalizeIndustry = (industry) => {
+    return industry === "all" || !industry ? "Other" : industry;
+  };
+
+  const escapeHtml = (value) => {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
+  const showTableMessage = (message) => {
+    companiesTableBody.innerHTML = `
+      <tr>
+        <td colspan="10" class="px-4 py-6 text-center text-sm text-gray-400">${message}</td>
+      </tr>
+    `;
+  };
+
+  const updateCompaniesCount = (visibleTotal = directoryEntries.length) => {
+    if (!companiesCount) {
+      return;
     }
 
-    const openCompanyModalButton = document.getElementById('openCompanyModal');
-    const companyModal = document.getElementById('companyModal');
-    const closeCompanyModalButton = document.getElementById('closeCompanyModal');
-    const cancelCompanyModalButton = document.getElementById('cancelCompanyModal');
-    const companyForm = document.getElementById('companyForm');
-    const companiesTableBody = document.getElementById('companiesTableBody');
-    const companiesCount = document.getElementById('companiesCount');
-    const exportCompaniesButton = document.getElementById('exportCompaniesButton');
-    const companyModalTitle = document.getElementById('companyModalTitle');
-    const companyModalDescription = document.getElementById('companyModalDescription');
-    const saveCompanyButton = document.getElementById('saveCompanyButton');
-    let editingCompanyRow = null;
+    companiesCount.textContent = `Showing ${visibleTotal} of ${directoryEntries.length} companies`;
+  };
 
-    if (!openCompanyModalButton || !companyModal || !companyForm || !companiesTableBody) {
-        return;
+  const setModalMode = (mode) => {
+    const isEditing = mode === "edit";
+
+    if (companyModalTitle) {
+      companyModalTitle.textContent = isEditing ? "Edit Company" : "Add New Company";
     }
 
-    const updateCompaniesCount = () => {
-        if (!companiesCount) {
-            return;
-        }
+    if (companyModalDescription) {
+      companyModalDescription.textContent = isEditing ? "Update the company information" : "Fill in the company information";
+    }
 
-        const totalCompanies = companiesTableBody.querySelectorAll('tr').length;
-        companiesCount.textContent = `Showing ${totalCompanies} of ${totalCompanies} companies`;
-    };
+    if (saveCompanyButton) {
+      saveCompanyButton.textContent = isEditing ? "Save Changes" : "Add Company";
+    }
+  };
 
-    const setModalMode = (mode) => {
-        const isEditing = mode === 'edit';
+  const openCompanyModal = (mode = "add") => {
+    setModalMode(mode);
+    companyModal.classList.remove("hidden");
+    companyModal.classList.add("flex");
+    document.body.classList.add("overflow-hidden");
+    document.getElementById("companyName")?.focus();
+  };
 
-        if (companyModalTitle) {
-            companyModalTitle.textContent = isEditing ? 'Edit Company' : 'Add New Company';
-        }
+  const closeCompanyModal = () => {
+    companyModal.classList.add("hidden");
+    companyModal.classList.remove("flex");
+    document.body.classList.remove("overflow-hidden");
+    companyForm.reset();
+    editingCompanyId = null;
+    setModalMode("add");
+  };
 
-        if (companyModalDescription) {
-            companyModalDescription.textContent = isEditing ? 'Update the company information' : 'Fill in the company information';
-        }
+  const getFieldValue = (fieldName) => {
+    const field = companyForm.elements[fieldName];
+    return field ? field.value.trim() : "";
+  };
 
-        if (saveCompanyButton) {
-            saveCompanyButton.textContent = isEditing ? 'Save Changes' : 'Add Company';
-        }
-    };
+  const setFieldValue = (fieldName, value) => {
+    const field = companyForm.elements[fieldName];
 
-    const openCompanyModal = (mode = 'add') => {
-        setModalMode(mode);
-        companyModal.classList.remove('hidden');
-        companyModal.classList.add('flex');
-        document.body.classList.add('overflow-hidden');
-        document.getElementById('companyName')?.focus();
-    };
+    if (field) {
+      field.value = value || "";
+    }
+  };
 
-    const closeCompanyModal = () => {
-        companyModal.classList.add('hidden');
-        companyModal.classList.remove('flex');
-        document.body.classList.remove('overflow-hidden');
-        companyForm.reset();
-        editingCompanyRow = null;
-        setModalMode('add');
-    };
+  const getCompanyFromForm = () => ({
+    company: getFieldValue("companyName"),
+    representative: getFieldValue("companyRepresentative"),
+    position: getFieldValue("companyPosition"),
+    email: getFieldValue("companyEmail"),
+    phone: getFieldValue("companyPhone"),
+    industry: getFieldValue("companyIndustry"),
+    website: getFieldValue("companyWebsite")
+  });
 
-    const getFieldValue = (fieldName) => {
-        const field = companyForm.elements[fieldName];
-        return field ? field.value.trim() : '';
-    };
+  const fillCompanyForm = (entry) => {
+    setFieldValue("companyName", entry.company);
+    setFieldValue("companyRepresentative", entry.representative);
+    setFieldValue("companyPosition", entry.position);
+    setFieldValue("companyEmail", entry.email);
+    setFieldValue("companyPhone", entry.phone);
+    setFieldValue("companyIndustry", entry.industry);
+    setFieldValue("companyWebsite", entry.website);
+  };
 
-    const setFieldValue = (fieldName, value) => {
-        const field = companyForm.elements[fieldName];
+  const getFilteredEntries = () => {
+    const searchTerm = searchInput?.value.trim().toLowerCase() || "";
+    const selectedIndustry = industryFilter?.value || "all";
 
-        if (field) {
-            field.value = value;
-        }
-    };
+    return directoryEntries.filter((entry) => {
+      const matchesSearch = [
+        entry.company,
+        entry.representative,
+        entry.email,
+        entry.phone,
+        entry.website
+      ].some((value) => String(value || "").toLowerCase().includes(searchTerm));
+      const matchesIndustry = selectedIndustry === "all" || entry.industry === selectedIndustry;
 
-    const createCell = (text, extraClasses) => {
-        const cell = document.createElement('td');
-        cell.className = `px-4 py-3.5 ${extraClasses}`;
-        cell.textContent = text;
-        return cell;
-    };
+      return matchesSearch && matchesIndustry;
+    });
+  };
 
-    const renumberCompanies = () => {
-        companiesTableBody.querySelectorAll('tr').forEach((row, index) => {
-            row.querySelector('td').textContent = String(index + 1);
+  const renderDirectory = () => {
+    const entries = getFilteredEntries();
+
+    if (!entries.length) {
+      showTableMessage(directoryEntries.length ? "No companies match your filters." : "No companies registered yet.");
+      updateCompaniesCount(0);
+      return;
+    }
+
+    companiesTableBody.innerHTML = entries.map((entry, index) => `
+      <tr class="hover:bg-gray-50 transition-colors" data-id="${entry.id}">
+        <td class="px-4 py-3.5 text-gray-400 font-mono text-xs">${index + 1}</td>
+        <td class="px-4 py-3.5 font-semibold text-gray-900">${escapeHtml(entry.company)}</td>
+        <td class="px-4 py-3.5 text-gray-600">${escapeHtml(entry.representative)}</td>
+        <td class="px-4 py-3.5 text-gray-500 text-xs">${escapeHtml(entry.position || "N/A")}</td>
+        <td class="px-4 py-3.5 text-gray-600">${escapeHtml(entry.email)}</td>
+        <td class="px-4 py-3.5 text-gray-600 whitespace-nowrap">${escapeHtml(entry.phone || "N/A")}</td>
+        <td class="px-4 py-3.5">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-xs font-medium border border-brand-100">${escapeHtml(normalizeIndustry(entry.industry))}</span>
+        </td>
+        <td class="px-4 py-3.5 text-gray-600 whitespace-nowrap">${escapeHtml(entry.website || "N/A")}</td>
+        <td class="px-4 py-3.5">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-50 text-emerald-700 border-emerald-200">${escapeHtml(entry.status || "active")}</span>
+        </td>
+        <td class="px-4 py-3.5">
+          <div class="flex items-center gap-1">
+            <button title="Edit" type="button" class="edit-company-button w-8 h-8 flex items-center justify-center rounded-md text-brand-600 hover:bg-brand-50 transition-colors cursor-pointer">
+              <i class="ri-edit-line text-base"></i>
+            </button>
+            <button title="Delete" type="button" class="delete-company-button w-8 h-8 flex items-center justify-center rounded-md text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+              <i class="ri-delete-bin-line text-base"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    updateCompaniesCount(entries.length);
+  };
+
+  const requestDirectory = async (url, options = {}) => {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...getAuthHeaders(),
+        ...options.headers
+      }
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Ocurrio un error en la solicitud");
+    }
+
+    return data;
+  };
+
+  const loadDirectory = async () => {
+    try {
+      showTableMessage("Loading companies...");
+      directoryEntries = await requestDirectory(API_URL);
+      renderDirectory();
+    } catch (error) {
+      showTableMessage(error.message);
+    }
+  };
+
+  const escapeCsvValue = (value) => {
+    const text = String(value ?? "");
+    return `"${text.replace(/"/g, '""')}"`;
+  };
+
+  const exportToExcel = (rows) => {
+    const headers = ["#", "Company", "Representative", "Position", "Email", "Phone", "Industry", "Website"];
+    const csvRows = [
+      headers.map(escapeCsvValue).join(","),
+      ...rows.map((entry, index) => [
+        index + 1,
+        entry.company,
+        entry.representative,
+        entry.position,
+        entry.email,
+        entry.phone,
+        entry.industry,
+        entry.website
+      ].map(escapeCsvValue).join(","))
+    ];
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "directory.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  openCompanyModalButton.addEventListener("click", () => {
+    editingCompanyId = null;
+    companyForm.reset();
+    openCompanyModal("add");
+  });
+  closeCompanyModalButton?.addEventListener("click", closeCompanyModal);
+  cancelCompanyModalButton?.addEventListener("click", closeCompanyModal);
+  searchInput?.addEventListener("input", renderDirectory);
+  industryFilter?.addEventListener("change", renderDirectory);
+  exportCompaniesButton?.addEventListener("click", () => {
+    exportToExcel(getFilteredEntries());
+  });
+
+  companyForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!companyForm.checkValidity()) {
+      companyForm.reportValidity();
+      return;
+    }
+
+    const company = getCompanyFromForm();
+    const isEditing = Boolean(editingCompanyId);
+
+    try {
+      if (saveCompanyButton) {
+        saveCompanyButton.disabled = true;
+        saveCompanyButton.textContent = isEditing ? "Saving..." : "Adding...";
+      }
+
+      if (isEditing) {
+        await requestDirectory(`${API_URL}/${editingCompanyId}`, {
+          method: "PUT",
+          body: JSON.stringify(company)
         });
-    };
-
-    const normalizeIndustry = (industry) => {
-        return industry === 'all' || !industry ? 'Other' : industry;
-    };
-
-    const fillCompanyRow = (row, company, number) => {
-        const cells = row.children;
-        const industry = normalizeIndustry(company.industry);
-
-        cells[0].textContent = String(number);
-        cells[1].textContent = company.name;
-        cells[2].textContent = company.representative;
-        cells[3].textContent = company.position || 'N/A';
-        cells[4].textContent = company.email;
-        cells[5].textContent = company.phone || 'N/A';
-        cells[6].querySelector('span').textContent = industry;
-        cells[7].textContent = company.website || 'N/A';
-        row.dataset.website = company.website || '';
-    };
-
-    const getCompanyFromForm = () => ({
-        name: getFieldValue('companyName'),
-        representative: getFieldValue('companyRepresentative'),
-        position: getFieldValue('companyPosition'),
-        email: getFieldValue('companyEmail'),
-        phone: getFieldValue('companyPhone'),
-        industry: getFieldValue('companyIndustry'),
-        website: getFieldValue('companyWebsite')
-    });
-
-    const getCompanyFromRow = (row) => {
-        const cells = row.children;
-        const position = cells[3].textContent.trim();
-        const phone = cells[5].textContent.trim();
-        const industry = cells[6].querySelector('span')?.textContent.trim() || 'all';
-        const website = cells[7].textContent.trim();
-
-        return {
-            name: cells[1].textContent.trim(),
-            representative: cells[2].textContent.trim(),
-            position: position === 'N/A' ? '' : position,
-            email: cells[4].textContent.trim(),
-            phone: phone === 'N/A' ? '' : phone,
-            industry,
-            website: website === 'N/A' ? '' : website
-        };
-    };
-
-    const fillCompanyForm = (company) => {
-        setFieldValue('companyName', company.name);
-        setFieldValue('companyRepresentative', company.representative);
-        setFieldValue('companyPosition', company.position);
-        setFieldValue('companyEmail', company.email);
-        setFieldValue('companyPhone', company.phone);
-        setFieldValue('companyIndustry', company.industry);
-        setFieldValue('companyWebsite', company.website);
-    };
-
-    const escapeCsvValue = (value) => {
-        const text = String(value ?? '');
-        return `"${text.replace(/"/g, '""')}"`;
-    };
-
-    const getCompaniesFromTable = () => {
-        return Array.from(companiesTableBody.querySelectorAll('tr')).map((row) => {
-            const company = getCompanyFromRow(row);
-            const cells = row.children;
-
-            return {
-                seq: cells[0].textContent.trim(),
-                ...company,
-                status: cells[8].textContent.trim(),
-                membershipExpiration: row.dataset.membershipExpiration || ''
-            };
+      } else {
+        await requestDirectory(API_URL, {
+          method: "POST",
+          body: JSON.stringify(company)
         });
-    };
+      }
 
-    const exportToExcel = (rows) => {
-        const headers = ['#', 'Company', 'Representative', 'Position', 'Email', 'Phone', 'Industry', 'Website'];
-        const csvRows = [
-            headers.map(escapeCsvValue).join(','),
-            ...rows.map((row) => [
-                row.seq,
-                row.name,
-                row.representative,
-                row.position,
-                row.email,
-                row.phone,
-                row.industry,
-                row.website,
-            ].map(escapeCsvValue).join(','))
-        ];
-        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+      closeCompanyModal();
+      await loadDirectory();
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      if (saveCompanyButton) {
+        saveCompanyButton.disabled = false;
+        setModalMode(isEditing ? "edit" : "add");
+      }
+    }
+  });
 
-        link.href = url;
-        link.download = 'companies.csv';
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(url);
-    };
+  companiesTableBody.addEventListener("click", async (event) => {
+    const row = event.target.closest("tr[data-id]");
+    const editButton = event.target.closest(".edit-company-button");
+    const deleteButton = event.target.closest(".delete-company-button");
 
-    const addCompanyRow = (company) => {
-        const row = document.createElement('tr');
-        row.className = 'hover:bg-gray-50 transition-colors';
-        row.dataset.website = company.website || '';
+    if (!row) {
+      return;
+    }
 
-        row.appendChild(createCell(String(companiesTableBody.querySelectorAll('tr').length + 1), 'text-gray-400 font-mono text-xs'));
-        row.appendChild(createCell(company.name, 'font-semibold text-gray-900'));
-        row.appendChild(createCell(company.representative, 'text-gray-600'));
-        row.appendChild(createCell(company.position || 'N/A', 'text-gray-500 text-xs'));
-        row.appendChild(createCell(company.email, 'text-gray-600'));
-        row.appendChild(createCell(company.phone || 'N/A', 'text-gray-600 whitespace-nowrap'));
+    const entry = directoryEntries.find((currentEntry) => String(currentEntry.id) === row.dataset.id);
 
-        const industryCell = document.createElement('td');
-        industryCell.className = 'px-4 py-3.5';
-        const industryBadge = document.createElement('span');
-        industryBadge.className = 'inline-flex items-center px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-xs font-medium border border-brand-100';
-        industryBadge.textContent = normalizeIndustry(company.industry);
-        industryCell.appendChild(industryBadge);
-        row.appendChild(industryCell);
-        row.appendChild(createCell(company.website || 'N/A', 'text-gray-600 whitespace-nowrap'));
+    if (editButton && entry) {
+      editingCompanyId = entry.id;
+      fillCompanyForm(entry);
+      openCompanyModal("edit");
+      return;
+    }
 
-        const statusCell = document.createElement('td');
-        statusCell.className = 'px-4 py-3.5';
-        const statusBadge = document.createElement('span');
-        statusBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border bg-emerald-50 text-emerald-700 border-emerald-200';
-        statusBadge.textContent = 'active';
-        statusCell.appendChild(statusBadge);
-        row.appendChild(statusCell);
+    if (!deleteButton || !entry) {
+      return;
+    }
 
-        const actionsCell = document.createElement('td');
-        actionsCell.className = 'px-4 py-3.5';
-        actionsCell.innerHTML = `
-            <div class="flex items-center gap-1">
-                <button title="Edit" type="button" class="edit-company-button w-8 h-8 flex items-center justify-center rounded-md text-brand-600 hover:bg-brand-50 transition-colors cursor-pointer">
-                    <i class="ri-edit-line text-base"></i>
-                </button>
-                <button title="Delete" type="button" class="delete-company-button w-8 h-8 flex items-center justify-center rounded-md text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
-                    <i class="ri-delete-bin-line text-base"></i>
-                </button>
-            </div>
-        `;
-        row.appendChild(actionsCell);
+    const shouldDelete = window.confirm(`Delete ${entry.company}?`);
 
-        companiesTableBody.appendChild(row);
-        updateCompaniesCount();
-    };
+    if (!shouldDelete) {
+      return;
+    }
 
-    openCompanyModalButton.addEventListener('click', () => {
-        editingCompanyRow = null;
-        companyForm.reset();
-        openCompanyModal('add');
-    });
-    closeCompanyModalButton?.addEventListener('click', closeCompanyModal);
-    cancelCompanyModalButton?.addEventListener('click', closeCompanyModal);
-    exportCompaniesButton?.addEventListener('click', () => {
-        exportToExcel(getCompaniesFromTable());
-    });
+    try {
+      await requestDirectory(`${API_URL}/${entry.id}`, {
+        method: "DELETE"
+      });
+      await loadDirectory();
+    } catch (error) {
+      alert(error.message);
+    }
+  });
 
-    companyModal.addEventListener('click', (event) => {
-        if (event.target === companyModal) {
-            closeCompanyModal();
-        }
-    });
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && !companyModal.classList.contains('hidden')) {
-            closeCompanyModal();
-        }
-    });
-
-    companyForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        if (!companyForm.checkValidity()) {
-            companyForm.reportValidity();
-            return;
-        }
-
-        const company = getCompanyFromForm();
-
-        if (editingCompanyRow) {
-            const rowNumber = editingCompanyRow.querySelector('td').textContent;
-            fillCompanyRow(editingCompanyRow, company, rowNumber);
-        } else {
-            addCompanyRow(company);
-        }
-
-        closeCompanyModal();
-    });
-
-    companiesTableBody.addEventListener('click', (event) => {
-        const editButton = event.target.closest('.edit-company-button');
-        const deleteButton = event.target.closest('.delete-company-button');
-
-        if (editButton) {
-            editingCompanyRow = editButton.closest('tr');
-            fillCompanyForm(getCompanyFromRow(editingCompanyRow));
-            openCompanyModal('edit');
-            return;
-        }
-
-        if (!deleteButton) {
-            return;
-        }
-
-        deleteButton.closest('tr')?.remove();
-        renumberCompanies();
-        updateCompaniesCount();
-    });
-
-    updateCompaniesCount();
+  loadDirectory();
 });
