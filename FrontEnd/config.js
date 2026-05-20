@@ -1,1 +1,1 @@
-window.API_BASE_URL = window.API_BASE_URL || "http://127.0.0.1:3000";
+window.API_BASE_URL = window.API_BASE_URL || "https://sistemacrm-i9pi.onrender.com";
