@@ -46,17 +46,33 @@ const PAGE_BY_LABEL = {
   "Pending Renewals": "renewals.html"
 };
 
+const KNOWN_PAGES = new Set(Object.keys(PAGE_PATHS));
+
+const normalizePageName = (page) => {
+  if (!page) {
+    return "index.html";
+  }
+
+  if (KNOWN_PAGES.has(page)) {
+    return page;
+  }
+
+  const htmlPage = `${page}.html`;
+  return KNOWN_PAGES.has(htmlPage) ? htmlPage : page;
+};
+
 const getPageFromPath = (href) => {
   if (!href) {
     return "";
   }
 
-  return href.split("#")[0].split("?")[0].split("/").pop();
+  const pathParts = href.split("#")[0].split("?")[0].split("/").filter(Boolean);
+  return normalizePageName(pathParts.pop());
 };
 
 const getCurrentPage = () => {
-  const page = window.location.pathname.split("/").pop();
-  return page || "index.html";
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  return normalizePageName(pathParts.pop());
 };
 
 const getRouteDepth = () => {
