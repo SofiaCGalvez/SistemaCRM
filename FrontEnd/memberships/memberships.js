@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "December"
   ];
   const monthOrder = new Map(MONTHS.map((month, index) => [month, index]));
-  const API_URL = "http://127.0.0.1:3000/api/memberships";
-  const DIRECTORY_API_URL = "http://127.0.0.1:3000/api/directory";
+  const API_URL = `${window.API_BASE_URL}/api/memberships`;
+  const DIRECTORY_API_URL = `${window.API_BASE_URL}/api/directory`;
   let memberships = [];
   let editingMembershipId = null;
   let createdSequence = 0;

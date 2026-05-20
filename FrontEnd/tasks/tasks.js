@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const storageKey = "crmTasks";
-  const API_URL = "http://127.0.0.1:3000/api/tasks";
+  const API_URL = `${window.API_BASE_URL}/api/tasks`;
   const openTaskModalButton = document.getElementById("openTaskModal");
   const taskModal = document.getElementById("taskModal");
   const closeTaskModalButton = document.getElementById("closeTaskModal");

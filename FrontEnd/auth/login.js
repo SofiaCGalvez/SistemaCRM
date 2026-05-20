@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:3000/api/auth/login";
+const API_URL = `${window.API_BASE_URL}/api/auth/login`;
 const REQUEST_TIMEOUT_MS = 10000;
 
 const loginForm = document.getElementById("loginForm");

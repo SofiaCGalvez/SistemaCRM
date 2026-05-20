@@ -120,9 +120,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadDashboardCounts = async () => {
     try {
       const [directoryEntries, memberships, events] = await Promise.all([
-        requestData("http://127.0.0.1:3000/api/directory"),
-        requestData("http://127.0.0.1:3000/api/memberships"),
-        requestData("http://127.0.0.1:3000/api/events")
+        requestData(`${window.API_BASE_URL}/api/directory`),
+        requestData(`${window.API_BASE_URL}/api/memberships`),
+        requestData(`${window.API_BASE_URL}/api/events`)
       ]);
       const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
 

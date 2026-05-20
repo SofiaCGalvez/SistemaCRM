@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const storageKey = "crmAttendees";
-  const API_URL = "http://127.0.0.1:3000/api/attendees";
+  const API_URL = `${window.API_BASE_URL}/api/attendees`;
   const openAttendeeModalButton = document.getElementById("openAttendeeModal");
   const attendeeModal = document.getElementById("attendeeModal");
   const closeAttendeeModalButton = document.getElementById("closeAttendeeModal");

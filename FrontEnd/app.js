@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const API_URL = "http://127.0.0.1:3000/api/directory";
+  const API_URL = `${window.API_BASE_URL}/api/directory`;
   let directoryEntries = [];
   let editingCompanyId = null;
 

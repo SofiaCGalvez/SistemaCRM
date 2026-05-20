@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const calendarYear = 2026;
   const storageKey = "crmEvents2026";
-  const API_URL = "http://127.0.0.1:3000/api/events";
+  const API_URL = `${window.API_BASE_URL}/api/events`;
 
   const monthTitle = document.getElementById("calendarMonthTitle");
   const calendarGrid = document.getElementById("calendarGrid");
