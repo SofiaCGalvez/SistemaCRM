@@ -1,14 +1,22 @@
 const AUTH_PAGES_BY_ROLE = {
-  admin: ["index.html", "dashboard.html", "directorio.html", "memberships.html", "renewals.html"],
-  staff: ["dashboard.html", "directorio.html"]
+  admin: [
+    "index.html",
+    "dashboard.html",
+    "directorio.html",
+    "memberships.html",
+    "events.html",
+    "attendees.html",
+    "tasks.html",
+    "renewals.html",
+    "potential.html"
+  ],
+  staff: ["dashboard.html", "directorio.html", "events.html", "tasks.html"]
 };
 
 const ADMIN_ONLY_LABELS = [
   "Home",
   "Memberships",
-  "Events",
   "Attendees",
-  "Tasks",
   "Pending Renewals",
   "Potential Members"
 ];
@@ -18,6 +26,10 @@ const PAGE_BY_LABEL = {
   Dashboard: "dashboard.html",
   Companies: "directorio.html",
   Memberships: "memberships.html",
+  Events: "events.html",
+  Attendees: "attendees.html",
+  Tasks: "tasks.html",
+  "Potential Members": "potential.html",
   "Pending Renewals": "renewals.html"
 };
 
