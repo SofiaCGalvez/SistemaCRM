@@ -92,6 +92,43 @@ const getStoredUser = () => {
   }
 };
 
+const formatUserText = (value) => {
+  return String(value || "")
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
+const updateLoggedUserUI = (loggedUser) => {
+  const roleLabel = formatUserText(loggedUser.role);
+  const displayName = formatUserText(loggedUser.name || loggedUser.role);
+  const initial = (displayName || roleLabel || "U").charAt(0).toUpperCase();
+
+  document.querySelectorAll("div").forEach((element) => {
+    const isUserAvatar = element.classList.contains("rounded-full")
+      && element.classList.contains("bg-brand-100")
+      && element.classList.contains("text-brand-700")
+      && element.textContent.trim().length === 1;
+
+    if (isUserAvatar) {
+      element.textContent = initial;
+    }
+  });
+
+  document.querySelectorAll("p").forEach((paragraph) => {
+    const text = paragraph.textContent.trim().toLowerCase();
+
+    if (paragraph.classList.contains("text-sm") && paragraph.classList.contains("font-medium") && text === "admin") {
+      paragraph.textContent = displayName;
+    }
+
+    if (paragraph.classList.contains("text-xs") && paragraph.classList.contains("capitalize") && text === "admin") {
+      paragraph.textContent = roleLabel;
+    }
+  });
+};
+
 const redirectToLogin = () => {
   window.location.replace(getPagePath("login.html"));
 };
@@ -121,6 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!loggedUser) {
     return;
   }
+
+  updateLoggedUserUI(loggedUser);
 
   document.querySelectorAll("a").forEach((link) => {
     const label = link.textContent.replace(/\s+/g, " ").trim();

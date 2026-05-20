@@ -306,8 +306,38 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="lg:w-[30%] space-y-5">
+                            <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                                <div class="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-4 h-4 flex items-center justify-center text-gray-500">
+                                            <i class="ri-file-list-3-line"></i>
+                                        </span>
+                                        <h3 class="text-sm font-semibold text-gray-800">Pending Tasks</h3>
+                                    </div>
+                                    <span id="pendingTasksCount" class="text-xs font-semibold bg-brand-50 text-brand-600 px-2 py-0.5 rounded-full">0</span>
+                                </div>
+                                <div id="pendingTasksList" class="divide-y divide-gray-50">
+                                    <div class="px-5 py-6 text-center text-sm text-gray-400">Loading tasks...</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div id="taskCompletedModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 px-4">
+                    <div class="bg-white rounded-xl w-full max-w-sm border border-gray-100 p-6 text-center">
+                        <div class="mx-auto w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                            <i class="ri-check-line text-2xl"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-900">Task completed</h2>
+                        <p class="text-sm text-gray-500 mt-1">The task was marked as completed successfully.</p>
+                        <button id="closeTaskCompletedModal" type="button" class="mt-5 w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-lg transition-colors text-sm">Done</button>
+                    </div>
+                </div>
+
+
             </main>
            
         </div>
