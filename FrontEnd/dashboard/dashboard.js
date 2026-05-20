@@ -62,14 +62,19 @@ document.addEventListener("DOMContentLoaded", () => {
     "in-progress": "bg-blue-50 text-blue-700 border-blue-200"
   };
 
-  const getAuthHeaders = () => ({
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`
-  });
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  };
 
   const requestData = async (url, options = {}, errorMessage = "There was an error loading the dashboard") => {
     const response = await fetch(url, {
       ...options,
+      credentials: "include",
       headers: {
         ...getAuthHeaders(),
         ...(options.headers || {})
@@ -301,25 +306,35 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const loadDashboardCounts = async () => {
-    try {
-      const [directoryEntries, memberships, events] = await Promise.all([
-        requestData(`${window.API_BASE_URL}/api/directory`),
-        requestData(`${window.API_BASE_URL}/api/memberships`),
-        requestData(`${window.API_BASE_URL}/api/events`)
-      ]);
-      const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
+    const membershipsRequest = loggedUser?.role === "admin"
+      ? requestData(`${window.API_BASE_URL}/api/memberships`)
+      : Promise.resolve([]);
+    const [directoryResult, membershipsResult, eventsResult] = await Promise.allSettled([
+      requestData(`${window.API_BASE_URL}/api/directory`),
+      membershipsRequest,
+      requestData(`${window.API_BASE_URL}/api/events`)
+    ]);
+    const directoryEntries = directoryResult.status === "fulfilled" ? directoryResult.value : [];
+    const memberships = membershipsResult.status === "fulfilled" ? membershipsResult.value : [];
+    const events = eventsResult.status === "fulfilled" ? eventsResult.value : [];
+    const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
 
-      setCounter(companiesCount, directoryEntries.length);
-      setCounter(activeMembersCount, memberships.length);
-      setCounter(upcomingEventsCount, upcomingEvents);
-      renderMembershipGrowthChart(memberships);
-    } catch (error) {
-      console.error(error);
-      setCounter(companiesCount, "0");
-      setCounter(activeMembersCount, "0");
-      setCounter(upcomingEventsCount, "0");
-      renderMembershipGrowthChart([]);
+    if (directoryResult.status === "rejected") {
+      console.error(directoryResult.reason);
     }
+
+    if (membershipsResult.status === "rejected") {
+      console.error(membershipsResult.reason);
+    }
+
+    if (eventsResult.status === "rejected") {
+      console.error(eventsResult.reason);
+    }
+
+    setCounter(companiesCount, directoryEntries.length);
+    setCounter(activeMembersCount, memberships.length);
+    setCounter(upcomingEventsCount, upcomingEvents);
+    renderMembershipGrowthChart(memberships);
   };
 
   pendingTasksList?.addEventListener("click", (event) => {

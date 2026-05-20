@@ -1,11 +1,14 @@
 const jwt = require("jsonwebtoken");
 
+const TOKEN_COOKIE_NAME = "crm_token";
+
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
+  const bearerToken = authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
+  const token = bearerToken || req.cookies?.[TOKEN_COOKIE_NAME];
 
   if (!token) {
-    return res.status(401).json({ message: "Token requerido" });
+    return res.status(401).json({ message: "Authentication required" });
   }
 
   try {
@@ -13,14 +16,14 @@ const authenticateToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(403).json({ message: "Token invalido o expirado" });
+    return res.status(403).json({ message: "Invalid or expired session" });
   }
 };
 
 const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ message: "No tienes permisos para esta accion" });
+      return res.status(403).json({ message: "You do not have permission to perform this action" });
     }
 
     next();

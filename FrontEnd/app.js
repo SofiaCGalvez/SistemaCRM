@@ -37,10 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let directoryEntries = [];
   let editingCompanyId = null;
 
-  const getAuthHeaders = () => ({
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`
-  });
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  };
 
   const normalizeIndustry = (industry) => {
     return industry === "all" || !industry ? "Other" : industry;
@@ -198,9 +202,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const requestDirectory = async (url, options = {}) => {
     const response = await fetch(url, {
       ...options,
+      credentials: "include",
       headers: {
         ...getAuthHeaders(),
-        ...options.headers
+        ...(options.headers || {})
       }
     });
     const data = await response.json();

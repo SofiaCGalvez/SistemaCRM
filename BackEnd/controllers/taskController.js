@@ -57,6 +57,11 @@ const getTasks = async (req, res) => {
 const createTask = async (req, res) => {
   try {
     const data = normalizeTaskData(req.body);
+
+    if (req.user.role === "staff") {
+      data.assignee = "staff";
+    }
+
     const validationError = validateTaskData(data);
 
     if (validationError) {
@@ -86,6 +91,11 @@ const updateTask = async (req, res) => {
     }
 
     const data = normalizeTaskData(req.body);
+
+    if (req.user.role === "staff") {
+      data.assignee = "staff";
+    }
+
     const validationError = validateTaskData(data);
 
     if (validationError) {

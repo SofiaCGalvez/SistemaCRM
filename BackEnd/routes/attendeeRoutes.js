@@ -12,9 +12,9 @@ const {
 
 const router = express.Router();
 
-router.get("/", authenticateToken, authorizeRoles("admin", "staff"), getAttendees);
-router.post("/", authenticateToken, authorizeRoles("admin", "staff"), createAttendee);
-router.put("/:id", authenticateToken, authorizeRoles("admin", "staff"), updateAttendee);
-router.delete("/:id", authenticateToken, authorizeRoles("admin", "staff"), deleteAttendee);
+router.get("/", authenticateToken, authorizeRoles("admin"), getAttendees);
+router.post("/", authenticateToken, authorizeRoles("admin"), createAttendee);
+router.put("/:id", authenticateToken, authorizeRoles("admin"), updateAttendee);
+router.delete("/:id", authenticateToken, authorizeRoles("admin"), deleteAttendee);
 
 module.exports = router;

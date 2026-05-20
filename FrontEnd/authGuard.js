@@ -191,7 +191,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
+      try {
+        await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
+          method: "POST",
+          credentials: "include"
+        });
+      } catch (error) {
+        console.error(error);
+      }
+
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.href = getPagePath("login.html");

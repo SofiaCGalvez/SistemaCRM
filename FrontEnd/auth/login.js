@@ -83,6 +83,7 @@ loginForm.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json"
       },
+      credentials: "include",
       body: JSON.stringify(credentials),
       signal: controller.signal
     });

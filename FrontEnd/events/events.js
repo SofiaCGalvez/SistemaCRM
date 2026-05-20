@@ -107,14 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
     return formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
   };
 
-  const getAuthHeaders = () => ({
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`
-  });
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+
+    return {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  };
 
   const requestEvents = async (url, options = {}) => {
     const response = await fetch(url, {
       ...options,
+      credentials: "include",
       headers: {
         ...getAuthHeaders(),
         ...(options.headers || {})
