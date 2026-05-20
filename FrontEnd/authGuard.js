@@ -46,6 +46,14 @@ const PAGE_BY_LABEL = {
   "Pending Renewals": "renewals.html"
 };
 
+const getPageFromPath = (href) => {
+  if (!href) {
+    return "";
+  }
+
+  return href.split("#")[0].split("?")[0].split("/").pop();
+};
+
 const getCurrentPage = () => {
   const page = window.location.pathname.split("/").pop();
   return page || "index.html";
@@ -99,25 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.querySelectorAll("a").forEach((link) => {
-    const label = link.textContent.trim();
+    const label = link.textContent.replace(/\s+/g, " ").trim();
+    const pageByLabel = PAGE_BY_LABEL[label];
 
-    if (PAGE_BY_LABEL[label]) {
-      link.href = getPagePath(PAGE_BY_LABEL[label]);
+    if (pageByLabel) {
+      link.href = getPagePath(pageByLabel);
     }
 
-    if (loggedUser.role === "staff" && ADMIN_ONLY_LABELS.includes(label)) {
+    const linkedPage = getPageFromPath(link.getAttribute("href"));
+    const isAllowedForRole = (AUTH_PAGES_BY_ROLE[loggedUser.role] || []).includes(linkedPage);
+
+    if (loggedUser.role === "staff" && !isAllowedForRole) {
       link.classList.add("hidden");
       return;
-    }
-
-    const linkedPage = link.getAttribute("href")?.split("/").pop();
-
-    if (
-      loggedUser.role === "staff" &&
-      linkedPage?.endsWith(".html") &&
-      !AUTH_PAGES_BY_ROLE.staff.includes(linkedPage)
-    ) {
-      link.href = getPagePath("dashboard.html");
     }
   });
 
