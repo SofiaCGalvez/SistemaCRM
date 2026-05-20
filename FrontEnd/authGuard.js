@@ -13,6 +13,19 @@ const AUTH_PAGES_BY_ROLE = {
   staff: ["dashboard.html", "directorio.html", "events.html", "tasks.html"]
 };
 
+const PAGE_PATHS = {
+  "index.html": "index.html",
+  "dashboard.html": "dashboard/dashboard.html",
+  "directorio.html": "directorio/directorio.html",
+  "memberships.html": "memberships/memberships.html",
+  "events.html": "events/events.html",
+  "attendees.html": "attendees/attendees.html",
+  "tasks.html": "tasks/tasks.html",
+  "renewals.html": "renewals/renewals.html",
+  "potential.html": "potential/potential.html",
+  "login.html": "auth/login.html"
+};
+
 const ADMIN_ONLY_LABELS = [
   "Home",
   "Memberships",
@@ -38,6 +51,15 @@ const getCurrentPage = () => {
   return page || "index.html";
 };
 
+const getRouteDepth = () => {
+  return getCurrentPage() === "index.html" ? 0 : 1;
+};
+
+const getPagePath = (page) => {
+  const prefix = "../".repeat(getRouteDepth());
+  return `${prefix}${PAGE_PATHS[page] || page}`;
+};
+
 const getStoredUser = () => {
   try {
     return JSON.parse(localStorage.getItem("user"));
@@ -47,11 +69,11 @@ const getStoredUser = () => {
 };
 
 const redirectToLogin = () => {
-  window.location.replace("./login.html");
+  window.location.replace(getPagePath("login.html"));
 };
 
 const redirectToDashboard = () => {
-  window.location.replace("./dashboard.html");
+  window.location.replace(getPagePath("dashboard.html"));
 };
 
 const token = localStorage.getItem("token");
@@ -80,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const label = link.textContent.trim();
 
     if (PAGE_BY_LABEL[label]) {
-      link.href = PAGE_BY_LABEL[label];
+      link.href = getPagePath(PAGE_BY_LABEL[label]);
     }
 
     if (loggedUser.role === "staff" && ADMIN_ONLY_LABELS.includes(label)) {
@@ -95,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       linkedPage?.endsWith(".html") &&
       !AUTH_PAGES_BY_ROLE.staff.includes(linkedPage)
     ) {
-      link.href = "dashboard.html";
+      link.href = getPagePath("dashboard.html");
     }
   });
 
@@ -115,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "./login.html";
+      window.location.href = getPagePath("login.html");
     });
   });
 });

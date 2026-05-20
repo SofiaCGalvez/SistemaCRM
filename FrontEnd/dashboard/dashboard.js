@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const companiesCount = document.getElementById("dashboardCompaniesCount");
   const activeMembersCount = document.getElementById("dashboardActiveMembersCount");
+  const upcomingEventsCount = document.getElementById("dashboardUpcomingEventsCount");
   const growthChart = document.getElementById("membershipGrowthChart");
   const growthSubtitle = document.getElementById("membershipGrowthSubtitle");
 
-  if (!companiesCount && !activeMembersCount && !growthChart) {
+  if (!companiesCount && !activeMembersCount && !upcomingEventsCount && !growthChart) {
     return;
   }
 
@@ -118,18 +119,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loadDashboardCounts = async () => {
     try {
-      const [directoryEntries, memberships] = await Promise.all([
+      const [directoryEntries, memberships, events] = await Promise.all([
         requestData("http://127.0.0.1:3000/api/directory"),
-        requestData("http://127.0.0.1:3000/api/memberships")
+        requestData("http://127.0.0.1:3000/api/memberships"),
+        requestData("http://127.0.0.1:3000/api/events")
       ]);
+      const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
 
       setCounter(companiesCount, directoryEntries.length);
       setCounter(activeMembersCount, memberships.length);
+      setCounter(upcomingEventsCount, upcomingEvents);
       renderMembershipGrowthChart(memberships);
     } catch (error) {
       console.error(error);
       setCounter(companiesCount, "0");
       setCounter(activeMembersCount, "0");
+      setCounter(upcomingEventsCount, "0");
       renderMembershipGrowthChart([]);
     }
   };

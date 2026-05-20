@@ -8,6 +8,7 @@ const directoryRoutes = require("./routes/directoryRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 const sequelize = require("./config/database");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/directory", directoryRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/memberships", membershipRoutes);
 app.use("/api/protected", protectedRoutes);
+app.use("/api/tasks", taskRoutes);
 
 sequelize.authenticate()
   .then(() => {

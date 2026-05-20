@@ -22,7 +22,7 @@ const getStoredUser = () => {
 };
 
 const getHomePageByRole = (role) => {
-  return role === "admin" ? "./index.html" : "./dashboard.html";
+  return role === "admin" ? "../index.html" : "../dashboard/dashboard.html";
 };
 
 const showMessage = (message, type = "error") => {

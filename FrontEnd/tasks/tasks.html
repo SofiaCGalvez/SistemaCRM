@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dist/output.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- Logo de la pestaÃ±a -->
+    <link rel="icon" type="image/png" href="../images/logo1.png">
+    <title>CRM</title>
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
+
+        .mobile-menu {
+            max-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu a,
+        .mobile-menu button,
+        .sidebar-nav a {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .app-sidebar {
+            width: 15rem;
+        }
+
+        .sidebar-brand {
+            padding: 1rem 1.25rem;
+        }
+
+        .sidebar-nav {
+            min-height: 0;
+            overflow-y: auto;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .sidebar-footer {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="min-h-screen bg-surface">
+            <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-brand-100">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <a class="flex items-center gap-2" href="../index.html" data-discover="true">
+                        <img alt="Logo" class="w-7 h-7 object-contain" src="../images/logo1.png">
+                        <span class="font-semibold text-brand-800 text-base">CRM Asociacion</span>
+                    </a>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-semibold text-xs">A</div>
+                        <button id="mobileMenuButton" type="button" class="w-8 h-8 flex items-center justify-center text-gray-600" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                            <i id="mobileMenuIcon" class="ri-menu-line text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <nav id="mobileMenu" class="mobile-menu hidden px-4 pb-4 space-y-1 border-t border-brand-100 bg-white">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900 " href="../index.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-home-4-line"></i>
+                        </span>
+                        Home
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900 " href="../dashboard/dashboard.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-dashboard-line"></i>
+                        </span>
+                        Dashboard
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors " href="../directorio/directorio.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-building-2-line"></i>
+                        </span>
+                        Companies
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900 " href="../memberships/memberships.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-vip-crown-line"></i>
+                        </span>
+                        Memberships
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../events/events.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-calendar-event-line"></i>
+                        </span>
+                        Events
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../attendees/attendees.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-user-follow-line"></i>
+                        </span>
+                        Attendees
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-brand-50 text-brand-700 " href="../tasks/tasks.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-task-line"></i>
+                        </span>
+                        Tasks
+                    </a>
+                    <button class="flex items-center gap-3 px-3 py-2.5 w-full text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-logout-box-r-line"></i>
+                        </span>
+                        Log out
+                    </button>
+                </nav>
+            </header>
+
+            <aside class="hidden lg:flex flex-col w-64 h-screen bg-white border-r border-brand-100 fixed left-0 top-0 z-40">
+                <div class="flex items-center gap-3 px-6 py-5 border-b border-brand-100">
+                    <img alt="logo" class="w-8 h-8 object-contain" src="../images/logo1.png">
+                    <span class="font-semibold text-brand-800 text-lg">CRM Asociacion</span>
+                </div>
+                <nav class="flex-1 px-3 py-4 space-y-1">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../index.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-home-5-line"></i>
+                        </span>
+                        Home
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../dashboard/dashboard.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-layout-grid-line"></i>
+                        </span>
+                        Dashboard
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../directorio/directorio.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-building-line"></i>
+                        </span>
+                        Companies
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors  text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../memberships/memberships.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-vip-crown-line"></i>
+                        </span>
+                        Memberships
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../events/events.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-calendar-line"></i>
+                        </span>
+                        Events
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../attendees/attendees.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-team-line"></i>
+                        </span>
+                        Attendees
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors  bg-brand-50 text-brand-700" href="../tasks/tasks.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-file-list-3-line"></i>
+                        </span>
+                        Tasks
+                    </a>
+                    <div class="my-3 border-t border-brand-100/60"></div>
+                    <p class="px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Actions</p>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../renewals/renewals.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-alarm-warning-line"></i>
+                        </span>
+                        Pending Renewals
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../potential/potential.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-user-add-line"></i>
+                        </span>
+                        Potential Members
+                    </a>
+                </nav>
+                <div class="px-4 py-4 border-t border-brand-100">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-semibold text-sm">A</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">admin</p>
+                            <p class="text-xs text-gray-500 truncate capitalize">admin</p>
+                        </div>
+                    </div>
+                    <button class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-logout-box-r-line"></i>
+                        </span>
+                        Log out
+                    </button>
+                </div>
+            </aside>
+
+            <main class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
+                <div class="p-6 md:p-8 max-w-[1440px] mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Tasks</h1>
+                            <p class="text-gray-500 mt-1 text-sm">Follow-ups and internal to-dos</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+
+                            <button id="openTaskModal" type="button" class="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors whitespace-nowrap">
+                                <span class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-add-line"></i>
+                                </span>
+                                Add Task
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                        <div class="relative flex-1">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-gray-400">
+                                <i class="ri-search-line"></i>
+                            </span>
+                            <input id="taskSearch" placeholder="Search tasks, assignees, or related entity..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 bg-white" type="text">
+                        </div>
+                        <select id="taskStatusFilter" class="sm:w-52 px-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 cursor-pointer">
+                            <option value="all">All statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <select id="taskPriorityFilter" class="sm:w-52 px-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 cursor-pointer">
+                            <option value="all">All priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-50 text-gray-600 font-medium">
+                                    <tr>
+                                        <th class="px-4 py-3 w-12">#</th>
+                                        <th class="px-4 py-3">Task</th>
+                                        <th class="px-4 py-3">Assignee</th>
+                                        <th class="px-4 py-3">Due Date</th>
+                                        <th class="px-4 py-3">Status</th>
+                                        <th class="px-4 py-3">Priority</th>
+                                        <th class="px-4 py-3">Related To</th>
+                                        <th class="px-4 py-3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tasksTableBody" class="divide-y divide-gray-100"></tbody>
+                            </table>
+                        </div>
+                        <div class="px-5 py-3 border-t border-gray-100 text-xs text-gray-400 flex items-center justify-between">
+                            <span id="tasksCount">Showing 0 of 0 tasks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!---Formulario de + Add Task-->
+                <div id="taskModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 px-4">
+                    <form id="taskForm" class="bg-white rounded-xl w-full max-w-lg border border-gray-100 overflow-hidden">
+                        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                            <div>
+                                <h2 id="taskModalTitle" class="text-base font-bold text-gray-900">Add Task</h2>
+                                <p id="taskModalDescription" class="text-xs text-gray-400 mt-0.5">Fill in the task information</p>
+                            </div>
+                            <button id="closeTaskModal" type="button" class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 cursor-pointer">
+                                <i class="ri-close-line text-lg"></i>
+                            </button>
+                        </div>
+                        <div class="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Task
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <input id="taskTitle" name="title" placeholder="e.g. Follow up with Acme Industries" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400" type="text" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Assignee
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <select id="taskAssignee" name="assignee" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 cursor-pointer" required>
+                                    <option value="">Select assignee</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="staff">Staff</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Due Date
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <input id="taskDueDate" name="dueDate" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400" type="date" required>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                                    <select id="taskStatus" name="status" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 cursor-pointer">
+                                        <option value="pending">Pending</option>
+                                        <option value="in-progress">In Progress</option>
+                                        <option value="completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Priority</label>
+                                    <select id="taskPriority" name="priority" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 cursor-pointer">
+                                        <option value="high">High</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="low">Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Related To
+                                    <span class="text-red-500">*</span>
+                                </label>
+                                <input id="taskRelatedTo" name="relatedTo" placeholder="e.g. Acme Industries, Annual Conference 2026" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400" type="text" required>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-100 flex gap-3">
+                            <button id="cancelTaskModal" type="button" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-lg transition-colors text-sm">Cancel</button>
+                            <button id="saveTaskButton" type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-lg transition-colors text-sm">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="taskSuccessModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 px-4">
+                    <div class="bg-white rounded-xl w-full max-w-sm border border-gray-100 p-6 text-center">
+                        <div class="mx-auto w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                            <i class="ri-check-line text-2xl"></i>
+                        </div>
+                        <h2 class="text-base font-bold text-gray-900">Task sent successfully</h2>
+                        <p class="text-sm text-gray-500 mt-1">Your task was saved and sent correctly.</p>
+                        <button id="closeTaskSuccessModal" type="button" class="mt-5 w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-lg transition-colors text-sm">Done</button>
+                    </div>
+                </div>
+
+
+            </main>
+           
+        </div>
+    </div>
+    <script src="../authGuard.js"></script>
+    <script src="../app.js"></script>
+    <script src="./tasks.js"></script>
+</body>
+</html>
+

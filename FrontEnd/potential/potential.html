@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dist/output.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- Logo de la pestaÃ±a -->
+    <link rel="icon" type="image/png" href="../images/logo1.png">
+    <title>CRM</title>
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
+
+        .mobile-menu {
+            max-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu a,
+        .mobile-menu button,
+        .sidebar-nav a {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .app-sidebar {
+            width: 15rem;
+        }
+
+        .sidebar-brand {
+            padding: 1rem 1.25rem;
+        }
+
+        .sidebar-nav {
+            min-height: 0;
+            overflow-y: auto;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .sidebar-footer {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="min-h-screen bg-surface">
+            <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-brand-100">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <a class="flex items-center gap-2" href="../index.html" data-discover="true">
+                        <img alt="Logo" class="w-7 h-7 object-contain" src="../images/logo1.png">
+                        <span class="font-semibold text-brand-800 text-base">CRM Asociacion</span>
+                    </a>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-semibold text-xs">A</div>
+                        <button id="mobileMenuButton" type="button" class="w-8 h-8 flex items-center justify-center text-gray-600" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                            <i id="mobileMenuIcon" class="ri-menu-line text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <nav id="mobileMenu" class="mobile-menu hidden px-4 pb-4 space-y-1 border-t border-brand-100 bg-white">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../index.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-home-4-line"></i>
+                        </span>
+                        Home
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900 " href="../dashboard/dashboard.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-dashboard-line"></i>
+                        </span>
+                        Dashboard
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-brand-50 text-brand-700" href="../directorio/directorio.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-building-2-line"></i>
+                        </span>
+                        Companies
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../memberships/memberships.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-vip-crown-line"></i>
+                        </span>
+                        Memberships
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../events/events.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-calendar-event-line"></i>
+                        </span>
+                        Events
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../attendees/attendees.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-user-follow-line"></i>
+                        </span>
+                        Attendees
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../tasks/tasks.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-task-line"></i>
+                        </span>
+                        Tasks
+                    </a>
+                    <button class="flex items-center gap-3 px-3 py-2.5 w-full text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-logout-box-r-line"></i>
+                        </span>
+                        Log out
+                    </button>
+                </nav>
+            </header>
+
+            <aside class="app-sidebar hidden lg:flex flex-col w-64 h-screen bg-white border-r border-brand-100 fixed left-0 top-0 z-40">
+                <div class="sidebar-brand flex items-center gap-3 px-6 py-5 border-b border-brand-100">
+                    <img alt="logo" class="w-8 h-8 object-contain" src="../images/logo1.png">
+                    <span class="font-semibold text-brand-800 text-lg">CRM Asociacion</span>
+                </div>
+                <nav class="sidebar-nav flex-1 px-3 py-4 space-y-1">
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../index.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-home-5-line"></i>
+                        </span>
+                        Home
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors  text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../dashboard/dashboard.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-layout-grid-line"></i>
+                        </span>
+                        Dashboard
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../directorio/directorio.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-building-line"></i>
+                        </span>
+                        Companies
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../memberships/memberships.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-vip-crown-line"></i>
+                        </span>
+                        Memberships
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../events/events.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-calendar-line"></i>
+                        </span>
+                        Events
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../attendees/attendees.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-team-line"></i>
+                        </span>
+                        Attendees
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900" href="../tasks/tasks.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-file-list-3-line"></i>
+                        </span>
+                        Tasks
+                    </a>
+                    <div class="my-3 border-t border-brand-100/60"></div>
+                    <p class="px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Actions</p>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900 " href="../renewals/renewals.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-alarm-warning-line"></i>
+                        </span>
+                        Pending Renewals
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors  bg-brand-50 text-brand-700" href="../potential/potential.html" data-discover="true">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-user-add-line"></i>
+                        </span>
+                        Potential Members
+                    </a>
+                </nav>
+                <div class="sidebar-footer px-4 py-4 border-t border-brand-100">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-semibold text-sm">A</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">admin</p>
+                            <p class="text-xs text-gray-500 truncate capitalize">admin</p>
+                        </div>
+                    </div>
+                    <button class="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <span class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-logout-box-r-line"></i>
+                        </span>
+                        Log out
+                    </button>
+                </div>
+            </aside>
+
+            <main class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
+                <div class="p-6 md:p-8 max-w-[1440px] mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Potential Members</h1>
+                            <p class="text-gray-500 mt-1 text-sm">Leads and prospects for membership</p>
+                        </div>
+                    </div>
+
+                    <!-- This section is currently being worked on. -->
+                    <section class="bg-white border border-gray-100 rounded-xl p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-center gap-6">
+                            <div class="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+                                <i class="ri-tools-line text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-xs font-semibold uppercase tracking-wide text-amber-600 mb-2">Coming soon</p>
+                                <h2 class="text-xl font-bold text-gray-900">This section is currently being worked on</h2>
+                                <p class="text-sm text-gray-500 mt-2 max-w-2xl">
+                                    Potential members, prospect details, contact notes, and follow-up status will be displayed here.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                            <div class="border border-gray-100 rounded-lg p-4 bg-gray-50/60">
+                                <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-brand-600 mb-3">
+                                    <i class="ri-user-search-line text-lg"></i>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-900">Prospect list</h3>
+                                <p class="text-xs text-gray-500 mt-1">Companies and contacts interested in joining.</p>
+                            </div>
+                            <div class="border border-gray-100 rounded-lg p-4 bg-gray-50/60">
+                                <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-emerald-600 mb-3">
+                                    <i class="ri-phone-line text-lg"></i>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-900">Follow up</h3>
+                                <p class="text-xs text-gray-500 mt-1">Calls, emails, and next steps for each prospect.</p>
+                            </div>
+                            <div class="border border-gray-100 rounded-lg p-4 bg-gray-50/60">
+                                <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-sky-600 mb-3">
+                                    <i class="ri-bar-chart-box-line text-lg"></i>
+                                </div>
+                                <h3 class="text-sm font-semibold text-gray-900">Lead status</h3>
+                                <p class="text-xs text-gray-500 mt-1">Track each lead from new prospect to member.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+           
+        </div>
+    </div>
+    <script src="../authGuard.js"></script>
+    <script src="../app.js"></script>
+</body>
+</html>
