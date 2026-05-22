@@ -129,7 +129,9 @@ npm run dev
 
 ## Base de datos
 
-El proyecto usa Sequelize. La conexion esta en:
+El proyecto usa Sequelize y MySQL. En desarrollo puede apuntar a una base local, y en despliegue puede apuntar a MySQL en Aiven mediante variables de entorno.
+
+La conexion esta en:
 
 ```text
 BackEnd/config/database.js
@@ -148,6 +150,35 @@ sequelize.sync()
 ```
 
 Esto sincroniza las tablas definidas por los modelos con la base de datos configurada.
+
+## Despliegue con Render y Aiven
+
+El backend puede desplegarse en Render y conectarse a una base de datos MySQL alojada en Aiven.
+
+| Servicio | Responsabilidad |
+| --- | --- |
+| Render | Ejecuta el backend con Node.js y expone la API |
+| Aiven | Aloja la base de datos MySQL |
+
+Variables importantes en Render:
+
+| Variable | Descripcion |
+| --- | --- |
+| `DB_HOST` | Host de MySQL copiado desde Aiven |
+| `DB_PORT` | Puerto de MySQL copiado desde Aiven |
+| `DB_NAME` | Nombre de la base de datos |
+| `DB_USER` | Usuario de la base de datos |
+| `DB_PASSWORD` | Password de la base de datos |
+| `DB_SSL` | Debe estar en `true` si Aiven requiere SSL |
+| `DB_SSL_REJECT_UNAUTHORIZED` | Puede usarse en `false` si el proveedor lo requiere |
+| `JWT_SECRET` | Llave privada larga para firmar tokens |
+| `FRONTEND_URLS` | URLs del frontend permitidas por CORS |
+
+Flujo:
+
+```text
+Frontend -> Render API -> Aiven MySQL
+```
 
 ## Crear usuarios iniciales
 

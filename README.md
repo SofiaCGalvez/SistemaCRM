@@ -108,6 +108,8 @@ El sistema contempla dos tipos de usuario:
 | cors | Configuración de acceso entre dominios |
 | Jest | Pruebas automatizadas |
 | Supertest | Pruebas HTTP de la API |
+| Render | Despliegue del backend/API |
+| Aiven | Base de datos MySQL en la nube |
 
 ### Frontend
 
@@ -548,6 +550,8 @@ Antes de desplegar, revisa:
 | Tema | Recomendación |
 | --- | --- |
 | Base de datos | Usa credenciales seguras y activa SSL si el proveedor lo requiere |
+| Aiven | Configura `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` y SSL |
+| Render | Configura las variables de entorno del backend y verifica el comando de inicio |
 | JWT | Configura un `JWT_SECRET` largo y privado |
 | CORS | Define `FRONTEND_URL` o `FRONTEND_URLS` con los dominios reales |
 | Cookies | Ajusta `COOKIE_SAME_SITE` y `COOKIE_SECURE` según el dominio y HTTPS |
@@ -558,11 +562,19 @@ Antes de desplegar, revisa:
 Configuración común en producción:
 
 ```env
+DB_SSL=true
+DB_SSL_REJECT_UNAUTHORIZED=false
 COOKIE_SECURE=true
 COOKIE_SAME_SITE=none
 ```
 
 > ⚠️ Si frontend y backend están en dominios diferentes, revisa cuidadosamente la configuración de cookies, CORS y HTTPS.
+
+Flujo de despliegue usado:
+
+```text
+Frontend -> API pública en Render -> MySQL en Aiven
+```
 
 ---
 
@@ -585,6 +597,7 @@ La documentación del proyecto está organizada en archivos separados:
 | --- | --- |
 | Tipo de proyecto | CRM web full stack |
 | Backend | Express + Sequelize + MySQL |
+| Despliegue | Render + Aiven |
 | Frontend | HTML + JavaScript + Tailwind CSS |
 | Autenticación | JWT + cookie HTTP-only |
 | Roles | `admin`, `staff` |

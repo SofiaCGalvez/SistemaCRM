@@ -24,6 +24,12 @@ const getAuthCookieOptions = () => {
 
 const login = async (req, res) => {
   try {
+    if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+      return res.status(500).json({
+        message: "Server authentication is not configured. Check JWT_SECRET."
+      });
+    }
+
     const { email, password, role } = req.body;
 
     if (

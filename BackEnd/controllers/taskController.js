@@ -33,7 +33,8 @@ const getTasks = async (req, res) => {
       where.assignee = req.query.assignee;
     }
 
-    // Staff users only work with staff-assigned tasks, even if the query asks for another assignee.
+    // Staff users only see tasks assigned to staff. They can send new tasks to admin,
+    // but those tasks belong to admin after creation.
     if (req.user.role === "staff") {
       where.assignee = "staff";
     }
@@ -58,11 +59,6 @@ const getTasks = async (req, res) => {
 const createTask = async (req, res) => {
   try {
     const data = normalizeTaskData(req.body);
-
-    // Staff-created tasks are always assigned to staff to preserve the role boundary.
-    if (req.user.role === "staff") {
-      data.assignee = "staff";
-    }
 
     const validationError = validateTaskData(data);
 
