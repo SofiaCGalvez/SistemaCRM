@@ -3,10 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const TASKS_API_URL = `${window.API_BASE_URL}/api/tasks`;
   const companiesCount = document.getElementById("dashboardCompaniesCount");
   const activeMembersCount = document.getElementById("dashboardActiveMembersCount");
-  const activeMetricLabel = document.getElementById("dashboardActiveMetricLabel");
   const upcomingEventsCount = document.getElementById("dashboardUpcomingEventsCount");
   const growthChart = document.getElementById("membershipGrowthChart");
-  const growthTitle = document.getElementById("dashboardGrowthTitle");
   const growthSubtitle = document.getElementById("membershipGrowthSubtitle");
   const pendingTasksList = document.getElementById("pendingTasksList");
   const pendingTasksCount = document.getElementById("pendingTasksCount");
@@ -239,36 +237,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const isStaffUser = () => loggedUser?.role === "staff";
-
-  const getCreatedDate = (record) => {
-    const date = new Date(record.createdAt || record.updatedAt || record.date);
-
-    return Number.isNaN(date.getTime()) ? null : date;
-  };
-
-  const getChartYear = (records, getRecordYear) => {
+  const getChartYear = (memberships) => {
     const currentYear = new Date().getFullYear();
-    const years = records
-      .map(getRecordYear)
+    const years = memberships
+      .map((membership) => Number(membership.year))
       .filter((year) => Number.isFinite(year));
 
     return years.includes(currentYear) ? currentYear : Math.max(currentYear, ...years);
   };
 
-  const renderGrowthChart = (records, options = {}) => {
+  const renderMembershipGrowthChart = (memberships) => {
     if (!growthChart) {
       return;
     }
 
-    const getRecordYear = options.getRecordYear || ((record) => Number(record.year));
-    const getRecordMonthIndex = options.getRecordMonthIndex || ((record) => MONTHS.indexOf(record.month));
-    const chartYear = getChartYear(records, getRecordYear);
+    const chartYear = getChartYear(memberships);
     const monthlyCounts = MONTHS.map((month) => {
-      const monthIndex = MONTHS.indexOf(month);
-
-      return records.filter((record) => {
-        return getRecordYear(record) === chartYear && getRecordMonthIndex(record) === monthIndex;
+      return memberships.filter((membership) => {
+        return Number(membership.year) === chartYear && membership.month === month;
       }).length;
     });
     const cumulativeCounts = monthlyCounts.reduce((totals, count, index) => {
@@ -319,30 +305,15 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   };
 
-  const renderMembershipGrowthChart = (memberships) => {
-    renderGrowthChart(memberships);
-  };
-
-  const renderCompanyGrowthChart = (directoryEntries) => {
-    renderGrowthChart(directoryEntries, {
-      getRecordYear: (entry) => getCreatedDate(entry)?.getFullYear(),
-      getRecordMonthIndex: (entry) => getCreatedDate(entry)?.getMonth()
-    });
-  };
-
   const loadDashboardCounts = async () => {
-    const membershipsRequest = loggedUser?.role === "admin"
-      ? requestData(`${window.API_BASE_URL}/api/memberships`)
-      : Promise.resolve([]);
     const [directoryResult, membershipsResult, eventsResult] = await Promise.allSettled([
       requestData(`${window.API_BASE_URL}/api/directory`),
-      membershipsRequest,
+      requestData(`${window.API_BASE_URL}/api/memberships`),
       requestData(`${window.API_BASE_URL}/api/events`)
     ]);
     const directoryEntries = directoryResult.status === "fulfilled" ? directoryResult.value : [];
     const memberships = membershipsResult.status === "fulfilled" ? membershipsResult.value : [];
     const events = eventsResult.status === "fulfilled" ? eventsResult.value : [];
-    const activeCompanies = directoryEntries.filter((entry) => entry.status === "active");
     const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
 
     if (directoryResult.status === "rejected") {
@@ -358,31 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setCounter(companiesCount, directoryEntries.length);
-    if (isStaffUser()) {
-      if (activeMetricLabel) {
-        activeMetricLabel.textContent = "Active companies";
-      }
-
-      if (growthTitle) {
-        growthTitle.textContent = "Company Growth";
-      }
-
-      setCounter(activeMembersCount, activeCompanies.length);
-      renderCompanyGrowthChart(directoryEntries);
-    } else {
-      if (activeMetricLabel) {
-        activeMetricLabel.textContent = "Active members";
-      }
-
-      if (growthTitle) {
-        growthTitle.textContent = "Membership Growth";
-      }
-
-      setCounter(activeMembersCount, memberships.length);
-      renderMembershipGrowthChart(memberships);
-    }
-
+    setCounter(activeMembersCount, memberships.length);
     setCounter(upcomingEventsCount, upcomingEvents);
+    renderMembershipGrowthChart(memberships);
   };
 
   pendingTasksList?.addEventListener("click", (event) => {
