@@ -7,6 +7,7 @@ const TOKEN_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "2h";
 const TOKEN_MAX_AGE_MS = Number(process.env.JWT_COOKIE_MAX_AGE_MS || 2 * 60 * 60 * 1000);
 
 const getAuthCookieOptions = () => {
+  // Production cross-site deployments need SameSite=None and Secure=true for cookies to work.
   const sameSite = process.env.COOKIE_SAME_SITE || (process.env.NODE_ENV === "production" ? "none" : "lax");
   const secure = process.env.COOKIE_SECURE
     ? process.env.COOKIE_SECURE === "true"
@@ -47,6 +48,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Keep only non-sensitive user data in the token payload.
     const token = jwt.sign(
       {
         id: user.id,

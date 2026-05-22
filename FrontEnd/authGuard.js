@@ -13,6 +13,7 @@ const AUTH_PAGES_BY_ROLE = {
   staff: ["dashboard.html", "directorio.html", "events.html", "tasks.html"]
 };
 
+// Each protected page is checked against this map before the user can continue.
 const PAGE_PATHS = {
   "index.html": "index.html",
   "dashboard.html": "dashboard/dashboard.html",
@@ -142,6 +143,7 @@ const user = getStoredUser();
 const currentPage = getCurrentPage();
 const allowedPages = AUTH_PAGES_BY_ROLE[user?.role] || [];
 
+// Frontend checks improve navigation UX; backend middleware remains the source of truth.
 if (!token || !user) {
   redirectToLogin();
 } else if (!AUTH_PAGES_BY_ROLE[user.role]) {
@@ -172,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const linkedPage = getPageFromPath(link.getAttribute("href"));
     const isAllowedForRole = (AUTH_PAGES_BY_ROLE[loggedUser.role] || []).includes(linkedPage);
 
+    // Hide navigation entries the current role cannot open.
     if (loggedUser.role === "staff" && !isAllowedForRole) {
       link.classList.add("hidden");
       return;

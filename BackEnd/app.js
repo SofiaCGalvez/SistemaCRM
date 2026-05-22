@@ -12,10 +12,8 @@ const eventRoutes = require("./routes/eventRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
 const taskRoutes = require("./routes/taskRoutes");
-const sequelize = require("./config/database");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
   console.warn("Security warning: set JWT_SECRET to a long random value with at least 32 characters.");
@@ -27,6 +25,8 @@ const defaultAllowedOrigins = [
   "http://localhost:5500",
   "http://127.0.0.1:5500"
 ];
+
+// CORS accepts local development origins plus the URLs configured in .env.
 const configuredAllowedOrigins = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -52,6 +52,8 @@ app.use(cors({
 }));
 app.use(express.json({ limit: "100kb" }));
 app.use(cookieParser());
+
+// Non-read requests must come from an allowed origin to reduce CSRF-style abuse.
 app.use((req, res, next) => {
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) {
     next();
@@ -67,6 +69,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// Login is rate-limited separately because it is the highest-risk public endpoint.
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: Number(process.env.AUTH_RATE_LIMIT || 10),
@@ -84,23 +87,8 @@ app.use("/api/memberships", membershipRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/tasks", taskRoutes);
 
-sequelize.authenticate()
-  .then(() => {
-    console.log("MySQL conectado");
-    return sequelize.sync();
-  })
-  .then(() => {
-    console.log("Tablas sincronizadas");
-  })
-  .catch((error) => {
-    console.log("Error de conexion:");
-    console.log(error);
-  });
-
 app.get("/", (req, res) => {
   res.send("API funcionando");
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+module.exports = app;

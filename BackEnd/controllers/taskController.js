@@ -33,6 +33,7 @@ const getTasks = async (req, res) => {
       where.assignee = req.query.assignee;
     }
 
+    // Staff users only work with staff-assigned tasks, even if the query asks for another assignee.
     if (req.user.role === "staff") {
       where.assignee = "staff";
     }
@@ -58,6 +59,7 @@ const createTask = async (req, res) => {
   try {
     const data = normalizeTaskData(req.body);
 
+    // Staff-created tasks are always assigned to staff to preserve the role boundary.
     if (req.user.role === "staff") {
       data.assignee = "staff";
     }
@@ -86,6 +88,7 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Tarea no encontrada" });
     }
 
+    // Staff cannot modify admin tasks, even if they know the task id.
     if (req.user.role === "staff" && task.assignee !== "staff") {
       return res.status(403).json({ message: "No tienes permisos para modificar esta tarea" });
     }
@@ -120,6 +123,7 @@ const deleteTask = async (req, res) => {
       return res.status(404).json({ message: "Tarea no encontrada" });
     }
 
+    // Deleting follows the same ownership rule used by update.
     if (req.user.role === "staff" && task.assignee !== "staff") {
       return res.status(403).json({ message: "No tienes permisos para eliminar esta tarea" });
     }
