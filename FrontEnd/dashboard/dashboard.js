@@ -3,8 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const TASKS_API_URL = `${window.API_BASE_URL}/api/tasks`;
   const companiesCount = document.getElementById("dashboardCompaniesCount");
   const activeMembersCount = document.getElementById("dashboardActiveMembersCount");
+  const activeMetricLabel = document.getElementById("dashboardActiveMetricLabel");
   const upcomingEventsCount = document.getElementById("dashboardUpcomingEventsCount");
   const growthChart = document.getElementById("membershipGrowthChart");
+  const growthTitle = document.getElementById("dashboardGrowthTitle");
   const growthSubtitle = document.getElementById("membershipGrowthSubtitle");
   const pendingTasksList = document.getElementById("pendingTasksList");
   const pendingTasksCount = document.getElementById("pendingTasksCount");
@@ -237,24 +239,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const getChartYear = (memberships) => {
+  const isStaffUser = () => loggedUser?.role === "staff";
+
+  const getCreatedDate = (record) => {
+    const date = new Date(record.createdAt || record.updatedAt || record.date);
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const getChartYear = (records, getRecordYear) => {
     const currentYear = new Date().getFullYear();
-    const years = memberships
-      .map((membership) => Number(membership.year))
+    const years = records
+      .map(getRecordYear)
       .filter((year) => Number.isFinite(year));
 
     return years.includes(currentYear) ? currentYear : Math.max(currentYear, ...years);
   };
 
-  const renderMembershipGrowthChart = (memberships) => {
+  const renderGrowthChart = (records, options = {}) => {
     if (!growthChart) {
       return;
     }
 
-    const chartYear = getChartYear(memberships);
+    const getRecordYear = options.getRecordYear || ((record) => Number(record.year));
+    const getRecordMonthIndex = options.getRecordMonthIndex || ((record) => MONTHS.indexOf(record.month));
+    const chartYear = getChartYear(records, getRecordYear);
     const monthlyCounts = MONTHS.map((month) => {
-      return memberships.filter((membership) => {
-        return Number(membership.year) === chartYear && membership.month === month;
+      const monthIndex = MONTHS.indexOf(month);
+
+      return records.filter((record) => {
+        return getRecordYear(record) === chartYear && getRecordMonthIndex(record) === monthIndex;
       }).length;
     });
     const cumulativeCounts = monthlyCounts.reduce((totals, count, index) => {
@@ -305,6 +319,17 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   };
 
+  const renderMembershipGrowthChart = (memberships) => {
+    renderGrowthChart(memberships);
+  };
+
+  const renderCompanyGrowthChart = (directoryEntries) => {
+    renderGrowthChart(directoryEntries, {
+      getRecordYear: (entry) => getCreatedDate(entry)?.getFullYear(),
+      getRecordMonthIndex: (entry) => getCreatedDate(entry)?.getMonth()
+    });
+  };
+
   const loadDashboardCounts = async () => {
     const membershipsRequest = loggedUser?.role === "admin"
       ? requestData(`${window.API_BASE_URL}/api/memberships`)
@@ -317,6 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const directoryEntries = directoryResult.status === "fulfilled" ? directoryResult.value : [];
     const memberships = membershipsResult.status === "fulfilled" ? membershipsResult.value : [];
     const events = eventsResult.status === "fulfilled" ? eventsResult.value : [];
+    const activeCompanies = directoryEntries.filter((entry) => entry.status === "active");
     const upcomingEvents = events.filter((eventItem) => eventItem.status === "upcoming").length;
 
     if (directoryResult.status === "rejected") {
@@ -332,9 +358,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setCounter(companiesCount, directoryEntries.length);
-    setCounter(activeMembersCount, memberships.length);
+    if (isStaffUser()) {
+      if (activeMetricLabel) {
+        activeMetricLabel.textContent = "Active companies";
+      }
+
+      if (growthTitle) {
+        growthTitle.textContent = "Company Growth";
+      }
+
+      setCounter(activeMembersCount, activeCompanies.length);
+      renderCompanyGrowthChart(directoryEntries);
+    } else {
+      if (activeMetricLabel) {
+        activeMetricLabel.textContent = "Active members";
+      }
+
+      if (growthTitle) {
+        growthTitle.textContent = "Membership Growth";
+      }
+
+      setCounter(activeMembersCount, memberships.length);
+      renderMembershipGrowthChart(memberships);
+    }
+
     setCounter(upcomingEventsCount, upcomingEvents);
-    renderMembershipGrowthChart(memberships);
   };
 
   pendingTasksList?.addEventListener("click", (event) => {
