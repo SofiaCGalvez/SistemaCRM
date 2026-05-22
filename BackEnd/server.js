@@ -3,6 +3,10 @@ const sequelize = require("./config/database");
 
 const PORT = process.env.PORT || 3000;
 
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
+});
+
 sequelize.authenticate()
   .then(() => {
     console.log("MySQL conectado");
@@ -10,10 +14,6 @@ sequelize.authenticate()
   })
   .then(() => {
     console.log("Tablas sincronizadas");
-
-    app.listen(PORT, () => {
-      console.log(`Servidor corriendo en puerto ${PORT}`);
-    });
   })
   .catch((error) => {
     console.log("Error de conexion:");

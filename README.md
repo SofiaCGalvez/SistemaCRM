@@ -36,6 +36,7 @@ El proyecto está dividido en un **backend con Express, Sequelize y MySQL** y un
 - [Endpoints principales](#-endpoints-principales)
 - [Modelos principales](#-modelos-principales)
 - [Scripts disponibles](#-scripts-disponibles)
+- [Pruebas automatizadas](#-pruebas-automatizadas)
 - [Flujo recomendado de uso](#-flujo-recomendado-de-uso)
 - [Notas de despliegue](#-notas-de-despliegue)
 - [Documentación adicional](#-documentación-adicional)
@@ -132,6 +133,8 @@ El sistema contempla dos tipos de usuario:
 |   +-- models/
 |   +-- routes/
 |   +-- seeders/
+|   +-- tests/
+|   +-- server.js
 |   +-- package.json
 +-- FrontEnd/
 |   +-- auth/
@@ -572,6 +575,7 @@ La documentación del proyecto está organizada en archivos separados:
 | 📘 [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | Guía para usuarios finales: login, roles, módulos y acciones principales |
 | 🧾 [`docs/API.md`](docs/API.md) | Endpoints, autenticación, permisos, cuerpos JSON y respuestas |
 | 🛠️ [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) | Guía técnica para instalación, mantenimiento, seguridad y extensión |
+| 🎤 [`docs/PRESENTACION_PROYECTO.md`](docs/PRESENTACION_PROYECTO.md) | Resumen del proyecto y guion de apoyo para exposición |
 
 ---
 

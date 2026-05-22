@@ -17,13 +17,14 @@ FrontEnd/config.js
 
 ## Backend
 
-Archivo principal:
+Archivos principales:
 
 ```text
 BackEnd/app.js
+BackEnd/server.js
 ```
 
-Responsabilidades:
+Responsabilidades de `BackEnd/app.js`:
 
 - Cargar variables de entorno.
 - Configurar seguridad con `helmet`.
@@ -31,6 +32,9 @@ Responsabilidades:
 - Configurar cookies.
 - Configurar rate limit para login.
 - Registrar rutas de API.
+
+Responsabilidades de `BackEnd/server.js`:
+
 - Conectar con MySQL usando Sequelize.
 - Sincronizar modelos.
 - Iniciar el servidor.
